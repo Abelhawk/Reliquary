@@ -7,13 +7,13 @@ namespace Reliquary
     public class Tx
     {
         internal static void Emphasis(object message, string color)
-            // Currently supports cyan, yellow, red, green, gray
         {
+            // Currently supports cyan, gold, red, green, gray
             if (color.ToLower() == "cyan")
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
             }
-            else if (color.ToLower() == "yellow")
+            else if (color.ToLower() == "gold")
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
             }
@@ -129,6 +129,13 @@ namespace Reliquary
              maybe like my birthday just for kicks.
              */
         
+        }
+
+        internal static string RandomString(string[] PossibleStrings)
+        {
+            Random rando = new Random();
+            int n = rando.Next(0, PossibleStrings.Length);
+            return PossibleStrings[n];
         }
     }
 }

@@ -10,11 +10,12 @@ namespace Reliquary
     {
         public static void StartGame()
         {
-            Tx.Emphasis("RELIQUARY - ©opyright 2020 Austin Ballard\n\n", "gray");
-            Console.Write("Press any key to start.");
-            Console.ReadKey();
-            Console.Clear();
-            ShowLogo();            
+            //Tx.Emphasis("RELIQUARY - ©opyright 2020 Austin Ballard\n\n", "gray");
+            //Console.Write("Press any key to start.");
+            //Console.ReadKey();
+            //Console.Clear();
+            ShowLogo();
+            Console.WriteLine("Welcome to Reliquary v.0.5!");
             if (GamesAreSaved("all"))
             {
                 bool Success = false;
@@ -25,29 +26,40 @@ namespace Reliquary
                     switch (Answer)
                     {
                         case 1:
-                            CreateNewCharacter();
+                            CreateNewCharacter("");
                             StartAdventure();
                             Success = true;
                             break;
-                        case 2:
-                            Console.Clear();
-                            ShowLogo();
-                            Console.Write("What is your name?\n>");
-                            string SaveFileName = Console.ReadLine();
-                            if (GamesAreSaved(SaveFileName))
+                        case 2:                                                       
+                            bool ValidResponse = false;
+                            while (!ValidResponse)
                             {
-                                LoadGame(SaveFileName);
-                                StartAdventure();
-                            }
-                            else
-                            {
-                                Console.Clear();
-                                Console.WriteLine("Never heard of you. Move along.");
-                            }
+                                ShowLogo();
+                                Console.Write("What is your name?\n>");
+                                string SaveFileName = Console.ReadLine();
+                                if (GamesAreSaved(SaveFileName))
+                                {
+                                    ValidResponse = true;
+                                    LoadGame(SaveFileName);
+                                    StartAdventure();
+                                }
+                                else
+                                {
+                                    ShowLogo();
+                                    Console.WriteLine("Never heard of you. Are you new here?");
+                                    string[] Options2 = { "I am, actually.", "No, I misspoke my name." };
+                                    int Response = Choice(Options2);
+                                    if (Response == 1)
+                                    {
+                                        ValidResponse = true;
+                                        CreateNewCharacter(SaveFileName);
+                                        break;
+                                    }                                    
+                                }
+                            }                            
                             break;
                         case 3:
-                            Console.Write("Fine! Press any key to leave.\n>");
-                            Success = true;
+                            Success = true;                            
                             break;
                     }
                 }
@@ -56,24 +68,25 @@ namespace Reliquary
 
         public static void ShowLogo()
         {
-            Tx.Emphasis(@" __   ___         __             __      ", "yellow");
+            Console.Clear();
+            Tx.Emphasis(@" __   ___         __             __      ", "gold");
             Console.WriteLine("");
-            Tx.Emphasis(@"|__) |__  |    | /  \ |  |  /\  |__) \ / ", "yellow");
+            Tx.Emphasis(@"|__) |__  |    | /  \ |  |  /\  |__) \ / ", "gold");
             Console.WriteLine("");
-            Tx.Emphasis(@"|  \ |___ |___ | \__X \__/ /--\ |  \  |  ", "yellow");
+            Tx.Emphasis(@"|  \ |___ |___ | \__X \__/ /——\ |  \  |  ", "gold");
             Console.WriteLine("\n");
-            Tx.Emphasis("== A daily dose of adventure! ==\n\n", "yellow");
+            Tx.Emphasis("== A daily dose of adventure! ==\n\n", "gold");
         }
 
         public static void LoadGame(string game)
         {
-            Tx.Emphasis("Loading game...\n", "gray");
             string file = "savedata/" + game + ".txt";
             StreamReader sr = new StreamReader(file);
             string line = null;
             int Ventures = 0;
             int VentureBonus = 0;
-            string WelcomeMessage = "You wake up rested and ready for a new day of adventuring!";
+            string WelcomeMessage = "";
+            string RestMessage = "You wake up rested and ready for a new day of adventuring!";
             while ((line = sr.ReadLine()) != null)
             {
                 line = line.Trim();
@@ -125,6 +138,12 @@ namespace Reliquary
                     Character.Level = Convert.ToInt32(line.Substring(6));
                     Tx.Emphasis("Loaded level.\n", "gray");
                 }
+                else if (line.StartsWith("Gold:"))
+                {
+                    //There should be a handling function to check for a valid maximum number...maybe
+                    Character.Gold = Convert.ToInt32(line.Substring(5));
+                    Tx.Emphasis("Loaded gold.\n", "gray");
+                }
                 else if (line.StartsWith("SleepQuality:"))
                 {
                     /*
@@ -149,11 +168,17 @@ namespace Reliquary
                         Character.Ventures = Ventures;
                         if (Ventures == 0)
                         {
-                            WelcomeMessage = "You wake up exhausted. You still need a good night's sleep!";
+                            //SleepQuality should definitely affect these.
+                            string[] WakeUpStrings = {
+                                "You wake up and yawn sleepily. You were having such a good dream...",
+                                "You wake up and squint in the darkness. What woke you up at this ungodsly hour?",
+                                "You wake up to answer nature's call, then climb back into bed."
+                            };
+                            RestMessage = Tx.RandomString(WakeUpStrings);
                         }
                         else
                         {
-                            WelcomeMessage = "You wake up. There's still time to do more adventuring today.";
+                            RestMessage = "You wake up and rub your eyes. That was a nice nap, but there's more to do today.";
                         }
                     }
                     else
@@ -165,18 +190,29 @@ namespace Reliquary
                           But if you wait too many days to play you get groggy. :D
                           You may also get a bonus to Ventures if you slept somewhere nice
                         */
-                        int DaysSinceLastLogin = (LastLoggedIn - DateTime.Today).Days;
-                        Tx.Emphasis("It has been " + DaysSinceLastLogin + " since you last played.", "red"); //DEBUG
+                        int DaysSinceLastLogin = (DateTime.Today.Subtract(LastLoggedIn)).Days;
+                        if (DaysSinceLastLogin > 1)
+                            //Test this tomorrow... It should be 3, I guess.
+                        {
+                            WelcomeMessage = "I haven't seen you for " + DaysSinceLastLogin + " days.";
+                            if (DaysSinceLastLogin >= 29)
+                            {
+                                WelcomeMessage = "I haven't seen you for a long time!";
+                            }
+                        }                        
                         switch (DaysSinceLastLogin)
                         {
+                            case 1:
+                                RestMessage = "You wake up and stretch. Time for a new day!";
+                                    break;
                             case 2:
                             case 3:
                                 VentureBonus = 2;
-                                WelcomeMessage = "You wake up very refreshed! What a good rest!";
+                                RestMessage = "You wake up very refreshed. What a good rest!";
                                 break;
                             case var _ when (DaysSinceLastLogin > 5):
                                 VentureBonus = -1;
-                                WelcomeMessage = "Wow, you slept for a long time. You feel a bit groggy.";
+                                RestMessage = "Wow, you slept for a long time. You feel a bit groggy.";
                                 break;
                         }
                         if (Ventures > 0)
@@ -190,9 +226,13 @@ namespace Reliquary
                 }
             }
             sr.Close();
+            ShowLogo();
+            Console.WriteLine("Welcome back, " + Character.Gender + " " + Character.Name + ".");
+            if (WelcomeMessage.Length > 0) Console.WriteLine(WelcomeMessage);
+            Tx.Emphasis("Press any key to continue your adventure!\n", "cyan");
+            Console.ReadKey();
             Console.Clear();
-            Console.WriteLine("Welcome back, " + Character.Gender + " " + Character.Name + ".\n");
-            Console.WriteLine(WelcomeMessage);
+            Console.WriteLine(RestMessage + "\n"); //May also remark about the sleeping conditions in this message or another one.
         }
 
         public static bool GamesAreSaved(string filename)
@@ -209,14 +249,11 @@ namespace Reliquary
             }
         }
 
-        public static void SaveGame() //DO THIS NEXT!!
+        public static void SaveGame()
         {
             /*
              Should this save after every interaction, or only when you go to sleep, I wonder?
-             Also, don't forget to save SleepQuality as an integer. I'm thinking on a scale of 1-6?
              */
-                 
-            //If for some stupid reason the player names themself "All," catch it and name it something else.
             string SavedData = "Name:" + Character.Name + "\n";
             SavedData += "Gender:" + Character.Gender + "\n";
             SavedData += "PlaceID:" + Character.CurrentLocation + "\n";
@@ -225,54 +262,79 @@ namespace Reliquary
             SavedData += "Wits:" + Character.Wits + "\n";
             SavedData += "Experience:" + Character.ExperiencePoints + "\n";
             SavedData += "Level:" + Character.Level + "\n";
-            //SavedData += "SleepQuality:" + SleepPlace + "\n"; //Should indicate what type of inn or sleep location        
+            //SavedData += "SleepQuality:" + SleepPlace + "\n"; //Should indicate what type of inn or sleep location, number from 1-6  
             SavedData += "Ventures:" + Character.Ventures + "\n";
             SavedData += "LastPlayed:" + DateTime.Today + "\n";
+            SavedData += "Gold:" + Character.Gold + "\n";
             for (int i = 0; i < Character.Inventory.Count; i++)
             {
                 SavedData += "Item:" + Character.Inventory[i].ID + "\n";
             }
-            Console.WriteLine("SavedData");
-            //File.WriteAllText("savedata.txt", SavedData);
+            File.WriteAllText("savedata/" + Character.Name.ToUpper() + ".txt", SavedData);
+            Console.Clear();
+            Console.WriteLine("Your game is saved!");
+            Console.WriteLine("Thanks for playing Reliquary! See you again soon."); //Oh wait, this should just say "You fall asleep..." 
+            Tx.Emphasis("Press any key to quit.", "cyan");
+            Console.ReadKey();            
         }
 
-        static void CreateNewCharacter()
+        static void CreateNewCharacter(string Name)
         {
-            Console.Write("First things first: what's your name, friend?\n>");
-            bool ValidName = false;
+            bool ValidName = (Name.Length > 0);
             bool LoadingGame = false;
+            string NameQuestion = "First things first: what's your name, friend?";
             while (!ValidName)
             {
-                string Name = Console.ReadLine();
-                if (Name.Length == 1)
+                ShowLogo();
+                Console.Write(NameQuestion + "\n>");
+                Name = Console.ReadLine();
+                NameQuestion = "What's your real name, then?";
+                if (GamesAreSaved(Name.ToUpper()) && Name != "all")
                 {
-                    Console.Write("That sounds like a nickname. What is it short for?\n>");
-                    break;
-                }
-                if (GamesAreSaved(Name))
-                {
-                    Console.Write("Ah, you've been here before, haven't you?\n");
+                    Console.Write("Wait... You've been here before, haven't you?\n");
                     string[] Options2 = { "I misspoke.", "Yeah, that's me!" };
                     int LoadOrNew = Choice(Options2);
-                    if (LoadOrNew == 1)
-                    {
-                        break;
-                    }
                     if (LoadOrNew == 2)
                     {
                         ValidName = true;
                         LoadingGame = true;
                         LoadGame(Name);
-                        break;
+                    }
+                }
+                else
+                {
+                    if (Name.Length == 1)
+                    {
+                        NameQuestion = "\"" + Name.ToUpper() + "?\" Nice nickname, but what's it short for?";
+                    }
+                    else if (Name.Length > 1)
+                    {
+                        if (Name.ToLower() == "all")
+                            // "all" is a parameter used to check whether there are any save files at all.
+                        {
+                            NameQuestion = "That can't be true... That name was outlawed in the Kingdom years ago.\nWhat's your real name?";
+                        }
+                        else if (Name.ToLower() == "abelhawk")
+                        {
+                            NameQuestion = "You're THE Abelhawk? Ha! Pull the other one, mate. What's your actual name?";
+                        }
+                        else
+                        {
+                            ValidName = true;
+                        }
                     }
                 }
             }
+
             if (!LoadingGame)
             {
-                Character.Name = Console.ReadLine();
+                ShowLogo();
+                Character.Name = Name;
                 for (int i = 1; i < Character.Name.Length; i++)
+                {
                     Character.Name = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Character.Name.ToLower());
-                Console.WriteLine("Nice to meet you then, " + Character.Name + ".");
+                }
+                Console.WriteLine("Welcome to Reliquary, " + Character.Name + ".");
                 Console.WriteLine("\nEh... does that mean you're a man or a woman?");
                 string[] Options = { "Man", "Woman", "Nonbinary" };
                 int Answer = Choice(Options);
@@ -334,15 +396,15 @@ namespace Reliquary
         }
 
         public static int Choice(string[] choices)
-        /*
-         Format a choice like this:
-        string[] Options = { "Pet a goat", "Make a stew", "'I'm selling these fine leather jackets...'" };
-        int Answer = Choice(Options);
-        switch (Answer) {
-            case 1: ...
-        }
-     */
         {
+            /*
+                Format a choice like this:
+                string[] Options = { "Pet a goat", "Make a stew", "'I'm selling these fine leather jackets...'" };
+                int Answer = Choice(Options);
+                    switch (Answer) {
+                        case 1: ...
+                    }
+            */
             Console.WriteLine("\nMake your choice:");
             for (int i = 0; i < choices.Length; i++)
             {
@@ -379,8 +441,11 @@ namespace Reliquary
         {
             Console.Clear();
             Tx.Emphasis(Character.Gender + " " + Character.Name + "\n", "cyan");
-            Console.Write("Level " + Character.Level + " Adventurer");
-            Console.WriteLine("Level " + Character.Level + " Adventurer");
+            Console.WriteLine("Level " + Character.Level + " Adventurer\n");
+            Console.Write("  Experience Points till level up: " + ((Character.Level * Character.Level) * 10 - Character.ExperiencePoints + "\n"));
+            Console.Write("  Money: ");
+            Tx.Emphasis(Character.Gold, "gold");
+            Console.Write(" gold\n");
             Console.Write("  Might: ");
             if (Character.Might > 0)
             {
@@ -410,7 +475,7 @@ namespace Reliquary
             }
             else
             {
-                Tx.Emphasis(Character.ShowFitness(), "yellow");
+                Tx.Emphasis(Character.ShowFitness(), "gold");
             }
             Console.WriteLine("\n");
         }
@@ -434,7 +499,7 @@ namespace Reliquary
         {
             Game.StartGame();
 
-            Console.ReadKey();
+            //Console.ReadKey();
         }
     }
 }
