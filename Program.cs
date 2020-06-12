@@ -16,53 +16,51 @@ namespace Reliquary
             //Console.Clear();
             ShowLogo();
             Console.WriteLine("Welcome to Reliquary v.0.5!");
-            if (GamesAreSaved("all"))
+            bool Success = false;
+            string[] Options = { "New Game", "Continue", "Quit" };
+            while (Success == false)
             {
-                bool Success = false;
-                string[] Options = { "New Game", "Continue", "Quit" };
-                while (Success == false)
+                int Answer = Choice(Options);
+                switch (Answer)
                 {
-                    int Answer = Choice(Options);
-                    switch (Answer)
-                    {
-                        case 1:
-                            CreateNewCharacter("");
-                            StartAdventure();
-                            Success = true;
-                            break;
-                        case 2:                                                       
-                            bool ValidResponse = false;
-                            while (!ValidResponse)
+                    case 1:
+                        CreateNewCharacter("");
+                        StartAdventure();
+                        Success = true;
+                        break;
+                    case 2:
+                        bool ValidResponse = false;
+                        while (!ValidResponse)
+                        {
+                            ShowLogo();
+                            Console.Write("What is your name?\n>");
+                            string SaveFileName = Console.ReadLine();
+                            if (GameIsSaved(SaveFileName))
+                            {
+                                ValidResponse = true;
+                                LoadGame(SaveFileName);
+                                StartAdventure();
+                            }
+                            else
                             {
                                 ShowLogo();
-                                Console.Write("What is your name?\n>");
-                                string SaveFileName = Console.ReadLine();
-                                if (GamesAreSaved(SaveFileName))
+                                Console.WriteLine("Never heard of you. Are you new here?");
+                                string[] Options2 = { "I am, actually.", "No, I misspoke my name." };
+                                int Response = Choice(Options2);
+                                if (Response == 1)
                                 {
                                     ValidResponse = true;
-                                    LoadGame(SaveFileName);
-                                    StartAdventure();
+                                    CreateNewCharacter(SaveFileName);
+                                    break;
                                 }
-                                else
-                                {
-                                    ShowLogo();
-                                    Console.WriteLine("Never heard of you. Are you new here?");
-                                    string[] Options2 = { "I am, actually.", "No, I misspoke my name." };
-                                    int Response = Choice(Options2);
-                                    if (Response == 1)
-                                    {
-                                        ValidResponse = true;
-                                        CreateNewCharacter(SaveFileName);
-                                        break;
-                                    }                                    
-                                }
-                            }                            
-                            break;
-                        case 3:
-                            Success = true;                            
-                            break;
-                    }
+                            }
+                        }
+                        break;
+                    case 3:
+                        Success = true;
+                        break;
                 }
+
             }
         }
 
@@ -192,19 +190,19 @@ namespace Reliquary
                         */
                         int DaysSinceLastLogin = (DateTime.Today.Subtract(LastLoggedIn)).Days;
                         if (DaysSinceLastLogin > 1)
-                            //Test this tomorrow... It should be 3, I guess.
+                        //Test this tomorrow... It should be 3, I guess.
                         {
                             WelcomeMessage = "I haven't seen you for " + DaysSinceLastLogin + " days.";
                             if (DaysSinceLastLogin >= 29)
                             {
                                 WelcomeMessage = "I haven't seen you for a long time!";
                             }
-                        }                        
+                        }
                         switch (DaysSinceLastLogin)
                         {
                             case 1:
                                 RestMessage = "You wake up and stretch. Time for a new day!";
-                                    break;
+                                break;
                             case 2:
                             case 3:
                                 VentureBonus = 2;
@@ -235,18 +233,10 @@ namespace Reliquary
             Console.WriteLine(RestMessage + "\n"); //May also remark about the sleeping conditions in this message or another one.
         }
 
-        public static bool GamesAreSaved(string filename)
+        public static bool GameIsSaved(string filename)
         {
-            if (filename == "all")
-            {
-                string[] files = Directory.GetFiles("savedata/", "*.txt", SearchOption.TopDirectoryOnly);
-                return (files.Length > 0);
-            }
-            else
-            {
                 string[] files = Directory.GetFiles("savedata/", filename + ".txt", SearchOption.TopDirectoryOnly);
-                return (files.Length > 0);
-            }
+                return (files.Length > 0);            
         }
 
         public static void SaveGame()
@@ -275,7 +265,7 @@ namespace Reliquary
             Console.WriteLine("Your game is saved!");
             Console.WriteLine("Thanks for playing Reliquary! See you again soon."); //Oh wait, this should just say "You fall asleep..." 
             Tx.Emphasis("Press any key to quit.", "cyan");
-            Console.ReadKey();            
+            Console.ReadKey();
         }
 
         static void CreateNewCharacter(string Name)
@@ -289,7 +279,7 @@ namespace Reliquary
                 Console.Write(NameQuestion + "\n>");
                 Name = Console.ReadLine();
                 NameQuestion = "What's your real name, then?";
-                if (GamesAreSaved(Name.ToUpper()) && Name != "all")
+                if (GameIsSaved(Name.ToUpper()))
                 {
                     Console.Write("Wait... You've been here before, haven't you?\n");
                     string[] Options2 = { "I misspoke.", "Yeah, that's me!" };
@@ -309,12 +299,7 @@ namespace Reliquary
                     }
                     else if (Name.Length > 1)
                     {
-                        if (Name.ToLower() == "all")
-                            // "all" is a parameter used to check whether there are any save files at all.
-                        {
-                            NameQuestion = "That can't be true... That name was outlawed in the Kingdom years ago.\nWhat's your real name?";
-                        }
-                        else if (Name.ToLower() == "abelhawk")
+                        if (Name.ToLower() == "abelhawk")
                         {
                             NameQuestion = "You're THE Abelhawk? Ha! Pull the other one, mate. What's your actual name?";
                         }
