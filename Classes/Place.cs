@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Reliquary.WorldData;
 
 namespace Reliquary
 {
@@ -9,6 +10,6 @@ namespace Reliquary
         public int PlaceID;
         public string Name;
         public string Description;
-        public string Locations;
+        public string Locations;      
     }
 }
