@@ -5,11 +5,11 @@ using Reliquary.WorldData;
 
 namespace Reliquary
 {
-    public class Place
+    public static class Place
     {
-        public int PlaceID;
-        public string Name;
-        public string Description;
-        public string Locations;      
+        public static int PlaceID;
+        public static string Name;
+        public static string Description;
+        public static string Locations;      
     }
 }

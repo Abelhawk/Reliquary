@@ -13,7 +13,7 @@ namespace Reliquary.GameMenus
             int Ventures = 0;
             int VentureBonus = 0;
             string WelcomeMessage = "";
-            string RestMessage = "You wake up rested and ready for a new day of adventuring!";
+            string RestMessage = "";
             while ((line = sr.ReadLine()) != null)
             {
                 line = line.Trim();
@@ -105,7 +105,7 @@ namespace Reliquary.GameMenus
                         }
                         else
                         {
-                            RestMessage = "You wake up and rub your eyes. That was a nice nap, but there's more to do today.";
+                            RestMessage = "You rub your eyes. That was a nice nap, but there's more to do today.";
                         }
                     }
                     else
@@ -121,25 +121,25 @@ namespace Reliquary.GameMenus
                         if (DaysSinceLastLogin > 1)
                         //Test this tomorrow... It should be 3, I guess.
                         {
-                            WelcomeMessage = "I haven't seen you for " + DaysSinceLastLogin + " days.";
+                            WelcomeMessage = "You last played " + DaysSinceLastLogin + " days ago.";
                             if (DaysSinceLastLogin >= 29)
                             {
-                                WelcomeMessage = "I haven't seen you for a long time!";
+                                WelcomeMessage += "It's been quite a while!";
                             }
                         }
                         switch (DaysSinceLastLogin)
                         {
                             case 1:
-                                RestMessage = "You wake up and stretch. Time for a new day!";
+                                RestMessage = "You feel rested.";
                                 break;
                             case 2:
                             case 3:
                                 VentureBonus = 2;
-                                RestMessage = "You wake up very refreshed. What a good rest!";
+                                RestMessage = "You feel refreshed!";
                                 break;
                             case var _ when (DaysSinceLastLogin > 5):
                                 VentureBonus = -1;
-                                RestMessage = "Wow, you slept for a long time. You feel a bit groggy.";
+                                RestMessage = "You feel a bit groggy.";
                                 break;
                         }
                         if (Ventures > 0)
@@ -156,10 +156,10 @@ namespace Reliquary.GameMenus
             Game.ShowLogo();
             Console.WriteLine("Welcome back, " + Character.Gender + " " + Character.Name + ".");
             if (WelcomeMessage.Length > 0) Console.WriteLine(WelcomeMessage);
-            Tx.Emphasis("Press any key to continue your adventure!\n", "cyan");
+            Tx.Emphasis("\nPress any key to continue your adventure!\n", "cyan");
             Console.ReadKey();
             Console.Clear();
-            Console.WriteLine(RestMessage + "\n"); //May also remark about the sleeping conditions in this message or another one.
+            Console.WriteLine(RestMessage);
         }
 
         public static bool GameIsSaved(string filename)
@@ -168,7 +168,7 @@ namespace Reliquary.GameMenus
             return (files.Length > 0);
         }
 
-        public static void SaveGame()
+        public static void SaveGame(int SleepQuality)
         {
             /*
              Should this save after every interaction, or only when you go to sleep, I wonder?
@@ -181,7 +181,7 @@ namespace Reliquary.GameMenus
             SavedData += "Wits:" + Character.Wits + "\n";
             SavedData += "Experience:" + Character.ExperiencePoints + "\n";
             SavedData += "Level:" + Character.Level + "\n";
-            //SavedData += "SleepQuality:" + SleepPlace + "\n"; //Should indicate what type of inn or sleep location, number from 1-6  
+            SavedData += "SleepQuality:" + SleepQuality + "\n"; //Should indicate what type of inn or sleep location, number from 1-6  
             SavedData += "Ventures:" + Character.Ventures + "\n";
             SavedData += "LastPlayed:" + DateTime.Today + "\n";
             SavedData += "Gold:" + Character.Gold + "\n";
@@ -190,10 +190,19 @@ namespace Reliquary.GameMenus
                 SavedData += "Item:" + Character.Inventory[i].ID + "\n";
             }
             File.WriteAllText("savedata/" + Character.Name.ToUpper() + ".txt", SavedData);
-            Console.Clear();
-            Console.WriteLine("Your game is saved!");
-            Console.WriteLine("Thanks for playing Reliquary! See you again soon."); //Oh wait, this should just say "You fall asleep..." 
-            Tx.Emphasis("Press any key to quit.", "cyan");
+            if (Character.Ventures == 0)
+            {
+                Console.WriteLine("You fall asleep, utterly exhausted.");
+            }
+            else if (Character.Ventures < 5)
+            {
+                Console.WriteLine("You fall asleep.");
+            } else
+            {
+                Console.WriteLine("You're not very tired, but eventually you fall asleep.");
+            }
+            Console.WriteLine("\nYour game is saved!");
+            Tx.Emphasis("Press any key to quit Reliquary.", "cyan");
             Console.ReadKey();
         }        
     }

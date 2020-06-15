@@ -12,14 +12,40 @@ namespace Reliquary.WorldData
 {
     class PlacesData
     {
-        static public void LoadPlaces()
+        static public void LoadPlace(int id, string WakeOrTravel)
         {
-            Place Place0 = new Place();
-            Place0.PlaceID = 0;
-            Place0.Name = "Merrydale Township";
-            Place0.Description = "The cobblestones under your feet vibrate with the sounds of peasant life around you.\n";
-            Place0.Description += "Villagers go to and fro, tending to their daily duties and paying you little heed.";
-            //List<Destination> 
+            if (WakeOrTravel == "Travel" && Character.Ventures == 0)
+            {
+                Console.WriteLine("You're too tired to venture anymore today.\n"); //BUG: This shows up directly after you spend your last venture
+            }
+            else
+            {
+                switch (id)
+                {
+                    case 0:
+                        {
+                            //Merrydale Township
+                            Places.Merrydale.Load(WakeOrTravel);
+                            break;
+                        }
+                    case 1:
+                        {
+                            if (WakeOrTravel == "Travel")
+                            {
+                                Character.Ventures --;
+                            }
+                            //Wildmarch Field
+                            Places.Wildmarch.Load(WakeOrTravel);
+                            break;
+                        }
+                    default:
+                        Console.WriteLine("You look around confused. You don't remember going to sleep here. Huh. Oh well.\n");
+                        Character.LastPlayed = DateTime.Today.ToString();
+                        Tx.Emphasis(Tx.GetGameDate(DateTime.Today.ToString(), "full") + "\n", "gray");
+                        Places.Merrydale.Load("");
+                        break;
+                }
+            }            
         }
     }
 }

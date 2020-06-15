@@ -8,6 +8,7 @@ namespace Reliquary
     {
         public int ID;
         public string Name;
-        public string Description;        
+        public string Description;     
+        public int Value;
     }
 }

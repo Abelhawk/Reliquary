@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using Reliquary.WorldData;
 
 namespace Reliquary.GameMenus
 {
@@ -14,17 +13,17 @@ namespace Reliquary.GameMenus
             //Console.Clear();
             Game.ShowLogo();
             Console.WriteLine("Welcome to Reliquary v.0.5!");
-            bool Success = false;
-            string[] Options = { "New Game", "Continue", "Quit" };
-            while (Success == false)
+            bool Done = false;
+            string[] Options = { "New Game", "Continue", "Quit", "Quick Play <<" }; //Quick Play
+            while (Done == false)
             {
                 int Answer = Game.Choice(Options);
                 switch (Answer)
                 {
                     case 1:
                         CreateNewCharacter("");
-                        StartAdventure();
-                        Success = true;
+                        StartAdventure("New");
+                        Done = true;
                         break;
                     case 2:
                         bool ValidResponse = false;
@@ -37,7 +36,7 @@ namespace Reliquary.GameMenus
                             {
                                 ValidResponse = true;
                                 SaveLoadController.LoadGame(SaveFileName);
-                                StartAdventure();
+                                StartAdventure("Wake");
                             }
                             else
                             {
@@ -55,7 +54,13 @@ namespace Reliquary.GameMenus
                         }
                         break;
                     case 3:
-                        Success = true;
+                        Done = true;
+                        break;
+                    case 4:
+                        QuickPlay.QuickLoad();
+                        Console.Clear();
+                        StartAdventure("Wake");                        
+                        Done = true;
                         break;
                 }
 
@@ -66,7 +71,7 @@ namespace Reliquary.GameMenus
 
         static void CreateNewCharacter(string Name)
         {
-            bool ValidName = (Name.Length > 0);
+            bool ValidName = (Name.Length > 0); //TODO: Maybe look for numerals?
             bool LoadingGame = false;
             string NameQuestion = "First things first: what's your name, friend?";
             while (!ValidName)
@@ -135,45 +140,16 @@ namespace Reliquary.GameMenus
                         Console.WriteLine("\nThank you, Lady " + Character.Name + ". Your adventure awaits you.");
                         break;
                 }
-                Initialize();
+                Inventory.AddSignetRing();
                 Tx.Emphasis("Press any key to start your adventure!\n", "cyan");
                 Console.ReadKey();
                 Console.Clear();
             }
         }
 
-        static void StartAdventure()
+        static void StartAdventure(string WakeOrTravel)
         {
-            Character.LastPlayed = DateTime.Today.ToString();
-            Tx.Emphasis(Tx.GetGameDate(DateTime.Today.ToString(), "full") + "\n", "gray");
-            //This should analyze the place, not just Merrydale right off the bat.
-            Tx.Emphasis("Merrydale Township\n", "cyan");
-            Console.WriteLine("The cobblestones under your feet vibrate with the sounds of peasant life around you.");
-            Console.WriteLine("Villagers go to and fro, tending to their daily duties and paying you little heed.");
-            string[] Options = { "Self", "Inventory", "Travel", "Save Game" };
-            int Answer = Game.Choice(Options);
-            switch (Answer)
-            {
-                case 1:
-                    Game.LookAtSelf();
-                    StartAdventure();
-                    break;
-                case 2:
-                    Game.CheckInventory();
-                    StartAdventure();
-                    break;
-                case 3:
-                    Console.WriteLine("Naw, let's do something else.");
-                    break;
-                case 4:
-                    SaveLoadController.SaveGame();
-                    break;
-            }
-        }
-
-        static void Initialize()
-        {
-            Inventory.AddSignetRing();
+            PlacesData.LoadPlace(Character.CurrentLocation, WakeOrTravel);
         }
     }
 }

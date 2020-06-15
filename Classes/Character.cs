@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Reliquary
 {
@@ -7,7 +8,7 @@ namespace Reliquary
         public static string Name = "Smith";
         public static string Gender = "Sir";
         public static List<Item> Inventory = new List<Item>();
-        public static int CurrentLocation = 1;
+        public static int CurrentLocation = 0;
         public static int Gold = 5;
 
         public static int Ventures = 5;
@@ -33,5 +34,20 @@ namespace Reliquary
             }
             return "Healthy";
         }
+
+        public static void DisplayVentures()
+        {
+            Console.Write("Ventures Remaining: ");
+            if (Character.Ventures > 0)
+            {
+                Tx.Emphasis(Character.Ventures + "\n\n", "gold");
+            } else
+            {
+                Tx.Emphasis(Character.Ventures + "\n\n", "red");
+            }
+            
+        }
     }
+
+    
 }

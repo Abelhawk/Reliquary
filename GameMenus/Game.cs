@@ -57,7 +57,7 @@ namespace Reliquary.GameMenus
             Console.WriteLine("");
             Tx.Emphasis(@"|  \ |___ |___ | \__X \__/ /——\ |  \  |  ", "gold");
             Console.WriteLine("\n");
-            Tx.Emphasis("== A daily dose of adventure! ==\n\n", "gold");
+            Tx.Emphasis("== Your daily dose of adventure! ==\n\n", "gold");
         }
 
         public static void LookAtSelf()
@@ -66,10 +66,9 @@ namespace Reliquary.GameMenus
             Tx.Emphasis(Character.Gender + " " + Character.Name + "\n", "cyan");
             Console.WriteLine("Level " + Character.Level + " Adventurer\n");
             Console.Write("  Experience Points till level up: " + ((Character.Level * Character.Level) * 10 - Character.ExperiencePoints + "\n"));
-            Console.Write("  Money: ");
+            Console.Write("  Gold: ");
             Tx.Emphasis(Character.Gold, "gold");
-            Console.Write(" gold\n");
-            Console.Write("  Might: ");
+            Console.Write("\n  Might: ");
             if (Character.Might > 0)
             {
                 Tx.Emphasis("+" + Character.Might + "\n", "green");
@@ -107,6 +106,10 @@ namespace Reliquary.GameMenus
         {
             Console.Clear();
             Tx.Emphasis("Your Inventory\n", "cyan");
+            if (Character.Inventory.Count == 0)
+            {
+                Tx.Emphasis("Empty!\n", "gray");
+            }
             for (int item = 0; item < Character.Inventory.Count; item++)
             {
                 Console.Write("* " + Character.Inventory[item].Name);

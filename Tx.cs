@@ -101,7 +101,7 @@ namespace Reliquary
                     DayOrdinal += "rd";
                     break;
                 default:
-                    DayOrdinal += Day + "th";
+                    DayOrdinal += "th";
                     break;
             }
             switch (Day)
