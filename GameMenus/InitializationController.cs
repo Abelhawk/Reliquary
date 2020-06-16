@@ -7,7 +7,7 @@ namespace Reliquary.GameMenus
     {
         internal static void StartGame()
         {
-            //Tx.Emphasis("RELIQUARY - ©opyright 2020 Austin Ballard\n\n", "gray");
+            Tx.Emphasis("RELIQUARY - ©opyright 2020 Austin Ballard\n", "gray");
             //Console.Write("Press any key to start.");
             //Console.ReadKey();
             //Console.Clear();
@@ -63,11 +63,8 @@ namespace Reliquary.GameMenus
                         Done = true;
                         break;
                 }
-
             }
         }
-
-        
 
         static void CreateNewCharacter(string Name)
         {
@@ -149,7 +146,7 @@ namespace Reliquary.GameMenus
 
         static void StartAdventure(string WakeOrTravel)
         {
-            PlacesData.LoadPlace(Character.CurrentLocation, WakeOrTravel);
+            Gameplay.Play(Character.CurrentLocation, WakeOrTravel);
         }
     }
 }
