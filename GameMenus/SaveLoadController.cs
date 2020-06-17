@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Reliquary.Places;
 
 namespace Reliquary.GameMenus
 {
@@ -12,6 +13,7 @@ namespace Reliquary.GameMenus
             string line = null;
             int Ventures = 0;
             int VentureBonus = 0;
+            int SleepQuality = 0;
             string WelcomeMessage = "";
             string RestMessage = "";
             while ((line = sr.ReadLine()) != null)
@@ -20,17 +22,14 @@ namespace Reliquary.GameMenus
                 if (line.StartsWith("Name:"))
                 {
                     Character.Name = line.Substring(5);
-                    Tx.Emphasis("Loaded name.\n", "gray");
                 }
                 else if (line.StartsWith("Gender:"))
                 {
                     Character.Gender = line.Substring(7);
-                    Tx.Emphasis("Loaded gender.\n", "gray");
                 }
                 else if (line.StartsWith("PlaceID:"))
                 {
                     Character.CurrentLocation = Convert.ToInt32(line.Substring(8));
-                    Tx.Emphasis("Loaded current location.\n", "gray");
                 }
                 else if (line.StartsWith("Item:"))
                 {
@@ -40,51 +39,44 @@ namespace Reliquary.GameMenus
                 {
                     //There should be a handling function to check for a valid maximum number
                     Character.Might = Convert.ToInt32(line.Substring(6));
-                    Tx.Emphasis("Loaded might stat.\n", "gray");
                 }
                 else if (line.StartsWith("Fitness:"))
                 {
                     Character.Fitness = Convert.ToInt32(line.Substring(8));
-                    Tx.Emphasis("Loaded fitness status.\n", "gray");
                 }
                 else if (line.StartsWith("Wits:"))
                 {
-                    //There should be a handling function to check for a valid maximum number
                     Character.Wits = Convert.ToInt32(line.Substring(5));
-                    Tx.Emphasis("Loaded wits stat.\n", "gray");
                 }
                 else if (line.StartsWith("Experience:"))
                 {
                     //There should be a handling function to check for a valid maximum number for the current level
                     Character.ExperiencePoints = Convert.ToInt32(line.Substring(11));
-                    Tx.Emphasis("Loaded experience points.\n", "gray");
                 }
                 else if (line.StartsWith("Level:"))
                 {
                     //There should be a handling function to check for a valid maximum number
                     Character.Level = Convert.ToInt32(line.Substring(6));
-                    Tx.Emphasis("Loaded level.\n", "gray");
                 }
                 else if (line.StartsWith("Gold:"))
                 {
                     //There should be a handling function to check for a valid maximum number...maybe
                     Character.Gold = Convert.ToInt32(line.Substring(5));
-                    Tx.Emphasis("Loaded gold.\n", "gray");
                 }
                 else if (line.StartsWith("SleepQuality:"))
                 {
                     /*
-                       This refers to the quality of inn or place you slept.
-                       Maybe roll for a chance to get sick if you slept outside or in a barn
-                       Get bonus ventures if you slept in a really nice inn suite
-                       SleepQuality should be an integer from 1-6, with 1 being camping
+                       1: Terrible - Might wake up sick or missing some coins from scavengers
+                       2: Okay - Sleeping in a poor house. Safe, but not comfortable.
+                       3: Decent - A straw-filled mattress in an inn (+2 bonus Ventures)
+                       4: Good - ? How many of these should I actually even bother with? (+4 bonus Ventures)
+                       5: Amazing - A feather bed in a castle (+6 bonus Ventures)
                      */
-                    Tx.Emphasis("Loaded sleep quality.\n", "gray");
+                    SleepQuality = Convert.ToInt32(line.Substring(13));
                 }
                 else if (line.StartsWith("Ventures:"))
                 {
                     Ventures = Convert.ToInt32(line.Substring(9));
-                    Tx.Emphasis("Loaded ventures.\n", "gray");
                 }
                 else if (line.StartsWith("LastPlayed:"))
                 {
@@ -99,7 +91,7 @@ namespace Reliquary.GameMenus
                             string[] WakeUpStrings = {
                                 "You wake up and yawn sleepily. You were having such a good dream...",
                                 "You wake up and squint in the darkness. What woke you up at this ungodsly hour?",
-                                "You wake up to answer nature's call, then climb back into bed."
+                                "You wake up to answer nature's call, then lie back down groggily."
                             };
                             RestMessage = Tx.RandomString(WakeUpStrings);
                         }
@@ -119,7 +111,6 @@ namespace Reliquary.GameMenus
                         */
                         int DaysSinceLastLogin = (DateTime.Today.Subtract(LastLoggedIn)).Days;
                         if (DaysSinceLastLogin > 1)
-                        //Test this tomorrow... It should be 3, I guess.
                         {
                             WelcomeMessage = "You last played " + DaysSinceLastLogin + " days ago.";
                             if (DaysSinceLastLogin >= 29)
@@ -127,7 +118,7 @@ namespace Reliquary.GameMenus
                                 WelcomeMessage += "It's been quite a while!";
                             }
                         }
-                        switch (DaysSinceLastLogin)
+                        switch (DaysSinceLastLogin) //I don't like this anymore
                         {
                             case 1:
                                 RestMessage = "You feel rested.";
@@ -146,7 +137,9 @@ namespace Reliquary.GameMenus
                         {
                             //If there are ventures left over from a previous day, you can keep up to 5 of them.
                             VentureBonus += Math.Max(5, Ventures);
+                            
                         }
+                        VentureBonus += ((SleepQuality - 2) * 2);
                         Character.Ventures = 5 + (Character.Fitness * 2) + Character.Might + Character.Wits + Character.Level + VentureBonus;
                     }
 
@@ -158,7 +151,7 @@ namespace Reliquary.GameMenus
             if (WelcomeMessage.Length > 0) Console.WriteLine(WelcomeMessage);
             Tx.Emphasis("\nPress any key to continue your adventure!\n", "cyan");
             Console.ReadKey();
-            Console.Clear();
+            Console.Clear();            
             Console.WriteLine(RestMessage);
         }
 
@@ -176,6 +169,7 @@ namespace Reliquary.GameMenus
             string SavedData = "Name:" + Character.Name + "\n";
             SavedData += "Gender:" + Character.Gender + "\n";
             SavedData += "PlaceID:" + Character.CurrentLocation + "\n";
+            SavedData += "SubLocation:" + Character.CurrentSubLocation + "\n";
             SavedData += "Might:" + Character.Might + "\n";
             SavedData += "Fitness:" + Character.Fitness + "\n";
             SavedData += "Wits:" + Character.Wits + "\n";

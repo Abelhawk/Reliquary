@@ -16,6 +16,7 @@ namespace Reliquary
         public string[] Options = { "Self", "Inventory", "Travel", "Sleep" };
         public string SleepConfirm = "error";
         public string GoToSleep = "error";
+        public string[] InnMessages = { };
 
         public Place(
             int id,
@@ -25,7 +26,8 @@ namespace Reliquary
             string wakeUp,
             string travel,
             string sleepConfirm,
-            string sleep
+            string sleep,
+            string[] inns
             )
         {
             ID = id;
@@ -36,6 +38,7 @@ namespace Reliquary
             Travel = travel;
             SleepConfirm = sleepConfirm;
             GoToSleep = sleep;
+            InnMessages = inns;
         }
         
     }

@@ -9,10 +9,18 @@ namespace Reliquary.GameMenus
         {
             Place Place = GetPlace(Character.CurrentLocation);
             bool Done = false;
+            Character.CurrentLocation = 0;
 
             if (wakeOrTravel == "Wake")
             {
-                Console.WriteLine(Place.WakeUp);
+                if (Character.CurrentSubLocation > 0) //This might be buggy
+                {
+                    Console.WriteLine(PlaceData.PlacesList[Character.CurrentLocation].InnMessages[Character.CurrentSubLocation]);
+                }
+                else
+                {
+                    Console.WriteLine(Place.WakeUp);
+                }                
                 Tx.Emphasis("\nPress any key.\n", "cyan");
                 Console.ReadKey();
                 Console.Clear();
