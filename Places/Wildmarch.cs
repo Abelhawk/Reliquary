@@ -40,7 +40,8 @@ namespace Reliquary.Places
             else if (LocationOptions[Choice] == "Merrydale Township")
             {
                 Console.Clear();
-                NavigationController.LoadPlace(0, "Travel", 0);
+                Character.CurrentLocation = 0;
+                NavigationController.LoadPlace("Travel", 0);
                 return true;
             }
             return false;

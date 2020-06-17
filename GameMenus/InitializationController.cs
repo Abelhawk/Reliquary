@@ -146,7 +146,7 @@ namespace Reliquary.GameMenus
 
         static void StartAdventure(string WakeOrTravel)
         {
-            Gameplay.Play(Character.CurrentLocation, WakeOrTravel);
+            Gameplay.Play(WakeOrTravel);
         }
     }
 }

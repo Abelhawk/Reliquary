@@ -9,6 +9,7 @@ namespace Reliquary
         public static string Gender = "Sir";
         public static List<Item> Inventory = new List<Item>();
         public static int CurrentLocation = 0;
+        public static int NextDestination = -1;
         public static int Gold = 5;
 
         public static int Ventures = 5;

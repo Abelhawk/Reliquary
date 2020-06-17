@@ -5,10 +5,9 @@ namespace Reliquary.GameMenus
 {
     class Gameplay
     {
-        public static void Play(int placeId, string wakeOrTravel)
+        public static void Play(string wakeOrTravel)
         {
-            Character.CurrentLocation = placeId;
-            Place Place = GetPlace(placeId);            
+            Place Place = GetPlace(Character.CurrentLocation);
             bool Done = false;
 
             if (wakeOrTravel == "Wake")
@@ -43,23 +42,16 @@ namespace Reliquary.GameMenus
             {                
                 case 1:
                     Game.LookAtSelf();
-                    Play(Place.ID, "");
                     break;
                 case 2:
                     Game.CheckInventory();
-                    Play(Place.ID, "");
                     break;
                 case 3:
                     Console.Clear();
                     Character.DisplayVentures();
                     Tx.Emphasis(Place.Name + "\n", "cyan");
                     Console.WriteLine("Where would you like to go?");
-                    Tx.Emphasis("Place ID is " + Place.ID, "red");
-                    Done = PlaceData.PlaceTravel(Place.ID);        
-                    if (Done == false)
-                    {
-                        Play(Place.ID, "");
-                    }
+                    Done = PlaceData.PlaceTravel(Character.CurrentLocation);
                     break;
                 case 4:
                     Console.Clear();
@@ -68,19 +60,18 @@ namespace Reliquary.GameMenus
                     Console.WriteLine(Place.SleepConfirm);
                     string[] YesNo = { "Yes", "No!" };
                     int SleepChoice = Game.Choice(YesNo);
+                    Console.Clear();
                     if (SleepChoice == 1)
                     {
-                        Console.Clear();
-                        Console.WriteLine(Place.GoToSleep);
-                        SaveLoadController.SaveGame(1);
                         Done = true;
-                    }
-                    Console.Clear();
-                    if (Done == false)
-                    {
-                        Play(Place.ID, "");
+                        Console.WriteLine(Place.GoToSleep);
+                        SaveLoadController.SaveGame(1);                        
                     }
                     break;
+            }
+            if (Done == false)
+            {
+                Play("");
             }
         }
 

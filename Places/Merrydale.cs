@@ -38,62 +38,74 @@ namespace Reliquary.Places
             else if (LocationOptions[Choice] == "Wildmarch Field(1)")
             {
                 Console.Clear();
-                NavigationController.LoadPlace(1, "Travel", 1);
+                if (Character.Ventures > 0)
+                {
+                    Character.CurrentLocation = 1;
+                    NavigationController.LoadPlace("Travel", 1);
+                }
                 return (Character.Ventures > 0);
             }
             return false;
         }
-    
 
-    public static void Smithy()
-    {
-        string[] Descriptions = {
+
+        public static void Smithy()
+        {
+            string[] Descriptions = {
                     "A man with an auburn beard looks up from helping his apprentice.",
                     "A strong blacksmith hammers away at a horseshoe on an anvil.",
-                    "You meet the owner of this establishment, Calahan Smith."
+                    "You meet the owner of this establishment, Kalahan Smith."
                 };
-        string[] Dialogs = {
+            string[] Dialogs = {
                     "\"What can I help you with?\"",
                     "\"I'll be right with you. I'm almost finished.\"",
                     "\"You say 'adventurer,' I say 'rat-catcher.'\""
                 };
-        bool JustEntering = true;
-        string Description = Tx.RandomString(Descriptions);
-        string Dialog = Tx.RandomString(Dialogs);
-        string[] Options = { "Buy", "Sell", "Upgrade", "Exit" };
-        bool Stay = true;
-        Console.Clear();
-        while (Stay)
-        {
-            Tx.Emphasis("Calahan's Smithy\n", "cyan");
-            if (JustEntering)
+            string[] Goodbyes =
             {
-                Console.WriteLine(Description);
-                JustEntering = false;
-            }
-            Tx.Emphasis(Dialog, "gold");
-            Console.WriteLine("");
-            int Answer = Game.Choice(Options);
-            switch (Answer)
+                "\"Stay safe out there.\"",
+                "\"Close the door on your way out.\"",
+                "\"Bye.\""
+            };
+            bool JustEntering = true;
+            string Description = Tx.RandomString(Descriptions);
+            string Dialog = Tx.RandomString(Dialogs);
+            string Goodbye = Tx.RandomString(Goodbyes) + "\n\n";
+            string[] Options = { "Buy", "Sell", "Upgrade", "Exit" };
+            bool Stay = true;
+            Console.Clear();
+            while (Stay)
             {
-                case 1:
-                    Console.Clear();
-                    Dialog = "\"Hoho! It'll be a while till Austin programs shops in this game. Come back in a few Git pushes.\"";
-                    break;
-                case 2:
-                    Console.Clear();
-                    Dialog = "\"My 'shopGold' variable isn't even defined yet. Come back in a few code changes.\"";
-                    break;
-                case 3:
-                    Console.Clear();
-                    Dialog = "\"Sorry, I don't have any materials to upgrade with. Come back in a few patches.\"";
-                    break;
-                case 4:
-                    Console.Clear();
-                    Stay = false;
-                    break;
+                Tx.Emphasis("Kalahan's Smithy\n", "cyan");
+                if (JustEntering)
+                {
+                    Console.WriteLine(Description);
+                    JustEntering = false;
+                }
+                Tx.Emphasis(Dialog, "gold");
+                Console.WriteLine("");
+                int Answer = Game.Choice(Options);
+                switch (Answer)
+                {
+                    case 1:
+                        Console.Clear();
+                        Dialog = "\"Hoho! It'll be a while till Austin programs shops in this game. Come back in a few Git pushes.\"";
+                        break;
+                    case 2:
+                        Console.Clear();
+                        Dialog = "\"My 'shopGold' variable isn't even defined yet. Come back in a few code changes.\"";
+                        break;
+                    case 3:
+                        Console.Clear();
+                        Dialog = "\"Sorry, I don't have any materials to upgrade with. Come back in a few patches.\"";
+                        break;
+                    case 4:
+                        Console.Clear();
+                        Tx.Emphasis(Goodbye, "gold");
+                        Stay = false;
+                        break;
+                }
             }
         }
     }
-}
 }
