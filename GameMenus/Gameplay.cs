@@ -7,7 +7,7 @@ namespace Reliquary.GameMenus
     {
         public static void Play(string wakeOrTravel)
         {
-            Place Place = GetPlace(Character.CurrentLocation);
+            Place Place = PlaceData.GetPlace(Character.CurrentLocation);
             bool Done = false;
             if (wakeOrTravel == "Wake")
             {
@@ -33,7 +33,6 @@ namespace Reliquary.GameMenus
                 Console.Clear();
                 Character.DisplayVentures();
             }
-            Character.CurrentLocation = 0;
             Tx.Emphasis(Place.Name + "\n", "cyan");
             Console.WriteLine(Place.Description1);
             Console.WriteLine(Place.Description2);
@@ -46,7 +45,7 @@ namespace Reliquary.GameMenus
                 case 2:
                     Game.CheckInventory();
                     break;
-                case 3:
+                case 3: // Travel
                     Console.Clear();
                     Character.DisplayVentures();
                     Tx.Emphasis(Place.Name + "\n", "cyan");
@@ -73,11 +72,6 @@ namespace Reliquary.GameMenus
             {
                 Play("");
             }
-        }
-
-        public static Place GetPlace(int id)
-        {
-            return PlaceData.PlacesList[id];
-        }
+        }        
     }
 }

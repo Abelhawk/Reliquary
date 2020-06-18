@@ -97,6 +97,7 @@ namespace Reliquary.GameMenus
             {
                 Tx.Emphasis(Character.ShowFitness(), "gold");
             }
+            Character.DisplayVentures();
             Console.WriteLine("\n");
         }
 
@@ -110,10 +111,17 @@ namespace Reliquary.GameMenus
             }
             for (int item = 0; item < Character.Inventory.Count; item++)
             {
-                Console.Write("* " + Character.Inventory[item].Name);
+                Item CurrentItem = Character.Inventory[item];
+                Console.Write("* ");
+                if (CurrentItem.Stock > 1)
+                {
+                    Console.Write(CurrentItem.Stock + "x ");
+                }
+                Console.Write(Character.Inventory[item].Name);
                 Tx.Emphasis(" - " + Character.Inventory[item].Description + "\n", "gray");
             }
             Console.WriteLine("");
+            //Should be put into a loop with options like "Use," "Drop," and "Back"
         }
     }
 }

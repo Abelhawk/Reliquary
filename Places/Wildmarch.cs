@@ -21,17 +21,8 @@ namespace Reliquary.Places
 
             if (LocationOptions[Choice] == "Tall Grasses(1)")
             {
-                Console.Clear();
-                if (Character.Ventures > 0)
-                {
-                    Console.WriteLine("You find a monster, but it won't fight because it's not programmed to yet. :(\n");
-                    Character.Ventures --;
-                }
-                else
-                {
-                    Console.WriteLine("You're too tired to do that.\n");
-                }                
-            }
+                WildmarchEncounters.Encounter(1);
+            }           
             else if (LocationOptions[Choice] == "Monastery")
             {
                 Console.Clear();
@@ -45,58 +36,6 @@ namespace Reliquary.Places
                 return true;
             }
             return false;
-        }
-    
-
-    public static void Smithy()
-    {
-        string[] Descriptions = {
-                    "A man with an auburn beard looks up from helping his apprentice.",
-                    "A strong blacksmith hammers away at a horseshoe on an anvil.",
-                    "You meet the owner of this establishment, Calahan Smith."
-                };
-        string[] Dialogs = {
-                    "\"What can I help you with?\"",
-                    "\"I'll be right with you. I'm almost finished.\"",
-                    "\"You say 'adventurer,' I say 'rat-catcher.'\""
-                };
-        bool JustEntering = true;
-        string Description = Tx.RandomString(Descriptions);
-        string Dialog = Tx.RandomString(Dialogs);
-        string[] Options = { "Buy", "Sell", "Upgrade", "Exit" };
-        bool Stay = true;
-        Console.Clear();
-        while (Stay)
-        {
-            Tx.Emphasis("Calahan's Smithy\n", "cyan");
-            if (JustEntering)
-            {
-                Console.WriteLine(Description);
-                JustEntering = false;
-            }
-            Tx.Emphasis(Dialog, "gold");
-            Console.WriteLine("");
-            int Answer = Game.Choice(Options);
-            switch (Answer)
-            {
-                case 1:
-                    Console.Clear();
-                    Dialog = "\"Hoho! It'll be a while till Austin programs shops in this game. Come back in a few Git pushes.";
-                    break;
-                case 2:
-                    Console.Clear();
-                    Dialog = "\"My 'shopGold' variable isn't even defined yet. Come back in a few code changes.\"";
-                    break;
-                case 3:
-                    Console.Clear();
-                    Dialog = "\"Sorry, I don't have any materials to upgrade with. Come back in a few patches.\"";
-                    break;
-                case 4:
-                    Console.Clear();
-                    Stay = false;
-                    break;
-            }
-        }
-    }
+        }    
 }
 }

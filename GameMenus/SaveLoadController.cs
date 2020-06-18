@@ -37,7 +37,7 @@ namespace Reliquary.GameMenus
                 }
                 else if (line.StartsWith("Item:"))
                 {
-                    Inventory.LoadItem(Convert.ToInt32(line.Substring(5)));
+                    Inventory.AddItem(Convert.ToInt32(line.Substring(5)));
                 }
                 else if (line.StartsWith("Might:"))
                 {

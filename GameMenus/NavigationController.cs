@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Reliquary.Places;
 using Reliquary.GameMenus;
 
@@ -18,7 +16,7 @@ namespace Reliquary.WorldData
         {
             if (wakeOrTravel == "Travel" && Character.Ventures == 0)
             {
-                Console.WriteLine("You're too tired to venture anymore today.\n"); //BUG: This shows up directly after you spend your last venture
+                Console.WriteLine("You're too tired to venture anymore today.\n");
             }
             else
             {
@@ -32,6 +30,7 @@ namespace Reliquary.WorldData
                     //If the save file is corrupted and it can't find the place ID, you just wake up in Merrydale.
                     Console.WriteLine("You look around confused. You don't remember going to sleep here. Huh. Oh well.\n");
                     Character.CurrentLocation = 0;
+                    Character.SleepLocation = 0;
                     Gameplay.Play("Wake");
                 }
                 else

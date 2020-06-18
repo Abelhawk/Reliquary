@@ -8,7 +8,7 @@ namespace Reliquary
     {
         internal static void Emphasis(object message, string color)
         {
-            // Currently supports cyan, gold, red, green, gray
+            // Currently supports cyan, gold, red, green, gray, blue
             if (color.ToLower() == "cyan")
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -28,6 +28,10 @@ namespace Reliquary
             else if (color.ToLower() == "gray")
             {
                 Console.ForegroundColor = ConsoleColor.DarkGray;
+            }
+            else if (color.ToLower() == "blue")
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
             }
             else
             {
@@ -136,6 +140,12 @@ namespace Reliquary
             Random rando = new Random();
             int n = rando.Next(0, PossibleStrings.Length);
             return PossibleStrings[n];
+        }
+
+        internal static int RandomInt(int min, int max)
+        {
+            Random rando = new Random();
+            return rando.Next(min, max);
         }
     }
 }

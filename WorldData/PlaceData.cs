@@ -5,7 +5,28 @@ using System.Text;
 namespace Reliquary.Places
 {
     class PlaceData
-    {
+    {  
+
+        public static bool PlaceTravel(int id)
+        {
+            switch (id)
+            {
+                case 0:
+                    return Places.Merrydale.Travel();
+                case 1:
+                    return Places.Wildmarch.Travel();
+                default:
+                    return false;
+            }
+        }
+
+        public static Place GetPlace(int id)
+        {
+            return PlacesList[id];
+        }
+
+        // ========= MASTER PLACE LIST ========= //
+
         public static Place Merrydale = new Place() {
             ID = 0,
             Name = "Merrydale Township",
@@ -36,21 +57,11 @@ namespace Reliquary.Places
             GoToSleep = "You pat down a patch of grass as best as you can and lie down for a rest under the open sky.",
         };
 
-        public static List<Place> PlacesList = new List<Place>{
-            Merrydale,
-            Wildmarch
-        };
+        // ========= END MASTER LIST ========= //
 
-        public static bool PlaceTravel(int id)
-        {
-            switch (id) {
-                case 0:
-                    return Places.Merrydale.Travel();
-                case 1:
-                    return Places.Wildmarch.Travel();
-                default:
-                    return false;
-            }
-        }
+        public static List<Place> PlacesList = new List<Place>{
+            Merrydale,          // 0
+            Wildmarch           // 1
+        };
     }
 }

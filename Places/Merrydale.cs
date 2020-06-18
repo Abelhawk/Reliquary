@@ -27,8 +27,7 @@ namespace Reliquary.Places
             }
             else if (LocationOptions[Choice] == "General Store")
             {
-                Console.Clear();
-                Console.WriteLine("You want to go to the general store? What are you, a shopaholic?\n");
+                GeneralStore();
             }
             else if (LocationOptions[Choice] == "Smithy")
             {
@@ -194,6 +193,12 @@ namespace Reliquary.Places
                 }
             }
             return false;
+        }
+
+        public static void GeneralStore()
+        {
+            Console.Clear();
+            Tx.Emphasis("\"We're closed! Come back when Austin programs us!\"\n\n", "gold");
         }
 
         public static void Smithy()
