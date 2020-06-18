@@ -11,35 +11,10 @@ namespace Reliquary
         public string Name = "error";
         public string Description1 = "error";
         public string Description2 = "error";
-        public string WakeUp = "error";
+        public string[] WakeUpMessages = { "error" };
         public string Travel = "error";
         public string[] Options = { "Self", "Inventory", "Travel", "Sleep" };
         public string SleepConfirm = "error";
-        public string GoToSleep = "error";
-        public string[] InnMessages = { };
-
-        public Place(
-            int id,
-            string name,
-            string desc1,
-            string desc2,
-            string wakeUp,
-            string travel,
-            string sleepConfirm,
-            string sleep,
-            string[] inns
-            )
-        {
-            ID = id;
-            Name = name;
-            Description1 = desc1;
-            Description2 = desc2;
-            WakeUp = wakeUp;
-            Travel = travel;
-            SleepConfirm = sleepConfirm;
-            GoToSleep = sleep;
-            InnMessages = inns;
-        }
-        
+        public string GoToSleep = "error";       
     }
 }

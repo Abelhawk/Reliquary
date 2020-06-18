@@ -138,21 +138,21 @@ namespace Reliquary.Places
                                     Cost = 3;
                                     Quality = 1;
                                     SleepMessage = "You eat some leftover watered-down soup and curl up on a thin mat in front of the fire.";
-                                    Character.CurrentLocation = 1;
+                                    Character.SleepLocation = 1;
                                     break;
                                 case 2:
                                     Cost = 15;
                                     Quality = 3;
                                     SleepMessage = "You eat some brown bread and pottage with roast carrots, then go upstairs into your locked room, wash " +
                                         "your hands and face, and lie down on a straw-filled mattress.";
-                                    Character.CurrentLocation = 2;
+                                    Character.SleepLocation = 2;
                                     break;
                                 case 3:
                                     Cost = 50;
                                     Quality = 5;
-                                    SleepMessage = "You enjoy a sumptuous meal of spiced mutton, cheese, and wine, then go upstairs for a bath and massage " +
+                                    SleepMessage = "You enjoy a sumptuous meal of spiced mutton and wine, go upstairs for a bath and massage " +
                                         "from an attractive servant, then draw the curtains of a comfortable, down-filled bed.";
-                                    Character.CurrentLocation = 3;
+                                    Character.SleepLocation = 3;
                                     break;
                             }
                             if (Character.Gold < Cost)
@@ -177,6 +177,7 @@ namespace Reliquary.Places
                                 else
                                 {
                                     Dialog = "\"Oh. Well, can I do anything else for ya?\"";
+                                    Character.SleepLocation = 0;
                                 }
                             }
                         }

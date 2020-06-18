@@ -31,6 +31,10 @@ namespace Reliquary.GameMenus
                 {
                     Character.CurrentLocation = Convert.ToInt32(line.Substring(8));
                 }
+                else if (line.StartsWith("SleepLocation:"))
+                {
+                    Character.SleepLocation = Convert.ToInt32(line.Substring(14));
+                }
                 else if (line.StartsWith("Item:"))
                 {
                     Inventory.LoadItem(Convert.ToInt32(line.Substring(5)));
@@ -169,7 +173,7 @@ namespace Reliquary.GameMenus
             string SavedData = "Name:" + Character.Name + "\n";
             SavedData += "Gender:" + Character.Gender + "\n";
             SavedData += "PlaceID:" + Character.CurrentLocation + "\n";
-            SavedData += "SubLocation:" + Character.CurrentSubLocation + "\n";
+            SavedData += "SleepLocation:" + Character.SleepLocation + "\n";
             SavedData += "Might:" + Character.Might + "\n";
             SavedData += "Fitness:" + Character.Fitness + "\n";
             SavedData += "Wits:" + Character.Wits + "\n";

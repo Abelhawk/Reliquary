@@ -9,18 +9,9 @@ namespace Reliquary.GameMenus
         {
             Place Place = GetPlace(Character.CurrentLocation);
             bool Done = false;
-            Character.CurrentLocation = 0;
-
             if (wakeOrTravel == "Wake")
             {
-                if (Character.CurrentSubLocation > 0) //This might be buggy
-                {
-                    Console.WriteLine(PlaceData.PlacesList[Character.CurrentLocation].InnMessages[Character.CurrentSubLocation]);
-                }
-                else
-                {
-                    Console.WriteLine(Place.WakeUp);
-                }                
+                Console.WriteLine(PlaceData.PlacesList[Character.CurrentLocation].WakeUpMessages[Character.SleepLocation]);
                 Tx.Emphasis("\nPress any key.\n", "cyan");
                 Console.ReadKey();
                 Console.Clear();
@@ -42,12 +33,13 @@ namespace Reliquary.GameMenus
                 Console.Clear();
                 Character.DisplayVentures();
             }
+            Character.CurrentLocation = 0;
             Tx.Emphasis(Place.Name + "\n", "cyan");
             Console.WriteLine(Place.Description1);
             Console.WriteLine(Place.Description2);
             int Answer = Game.Choice(Place.Options);
             switch (Answer)
-            {                
+            {
                 case 1:
                     Game.LookAtSelf();
                     break;
@@ -73,7 +65,7 @@ namespace Reliquary.GameMenus
                     {
                         Done = true;
                         Console.WriteLine(Place.GoToSleep);
-                        SaveLoadController.SaveGame(1);                        
+                        SaveLoadController.SaveGame(1);
                     }
                     break;
             }
@@ -87,5 +79,5 @@ namespace Reliquary.GameMenus
         {
             return PlaceData.PlacesList[id];
         }
-    }    
+    }
 }
