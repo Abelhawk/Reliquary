@@ -7,26 +7,30 @@ namespace Reliquary.Places
 {
     class Wildmarch
     {
-        public static List<string> LocationOptionsList = new List<string> {
-                "Tall Grasses(1)",
+        public static List<string> LocationOptions = new List<string> {
+                "Tall Grasses (1)",
                 "Monastery",
-                "Merrydale Township"
+                "Merrydale Township",
+                "Back"
             };
 
         public static bool Travel()
         {
-            string[] LocationOptions = LocationOptionsList.ToArray();
-            int Choice = Game.Choice(LocationOptions);
+            int Choice = Game.Choice(LocationOptions.ToArray());
             Choice--;
 
-            if (LocationOptions[Choice] == "Tall Grasses(1)")
+            if (LocationOptions[Choice] == "Tall Grasses (1)")
             {
                 WildmarchEncounters.Encounter(1);
+                Character.DisplayVentures();
+                Tx.Emphasis(PlaceData.GetPlace(Character.CurrentLocation).Name + "\n", "cyan");
+                Console.WriteLine("Where would you like to go?");
+                Travel();
             }           
             else if (LocationOptions[Choice] == "Monastery")
             {
                 Console.Clear();
-                Tx.Emphasis("\"I'm afraid we're not accepted visitors at the moment. Our monastery isn't rendered yet.\"\n\n", "gold");
+                Tx.Emphasis("\"I'm afraid we're not accepted visitors at the moment. Our monastery isn't programmed yet.\"\n\n", "gold");
             }
             else if (LocationOptions[Choice] == "Merrydale Township")
             {
@@ -35,6 +39,7 @@ namespace Reliquary.Places
                 NavigationController.LoadPlace("Travel", 0);
                 return true;
             }
+            Console.Clear();
             return false;
         }    
 }

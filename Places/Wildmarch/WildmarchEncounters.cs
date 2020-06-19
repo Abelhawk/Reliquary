@@ -27,7 +27,7 @@ namespace Reliquary.Places
             Console.Clear();
             if (Character.Ventures - VentureCost < 0)
             {
-                Console.WriteLine("You're too tired to venture there anymore today.\n");
+                Console.WriteLine("You're too tired to venture anymore today.\n");
                 return;
             }            
             else
@@ -69,7 +69,9 @@ namespace Reliquary.Places
                         Console.WriteLine("The remains of a campfire and some ripped tents lie scattered on the ground.");
                         if (Character.WitsCheck(5))
                         {
-                            Console.WriteLine("You manage to find " + Tx.RandomInt(2, 6) + " gold coins discarded nearby.\n");
+                            int GoldFind = Tx.RandomInt(2, 6);
+                            Console.WriteLine("You manage to find " + GoldFind + " gold coins discarded nearby.\n");
+                            Character.Gold += GoldFind;
                         }
                         else
                         {
@@ -122,10 +124,12 @@ namespace Reliquary.Places
                                             if (Character.Gold - Stolen <= 0)
                                             {
                                                 Console.WriteLine("The thief made off with the rest of your gold!\n");
+                                                Character.Gold = 0;
                                             }
                                             else
                                             {
                                                 Console.WriteLine("The thief made off with " + Stolen + " gold!\n");
+                                                Character.Gold -= Stolen;
                                             }
                                         }
                                     }
@@ -142,6 +146,7 @@ namespace Reliquary.Places
                                         "few coins for your trouble.");
                                     int Reward2 = Tx.RandomInt(4, 8);
                                     Console.WriteLine("You received " + Reward2 + " gold!\n");
+                                    Character.Gold += Reward2;
                                 }
                                 break;
                             case 2:
@@ -161,6 +166,7 @@ namespace Reliquary.Places
                         Console.WriteLine("You decide to take a rest by a crystal pond. Drinking its clear water, you feel supernaturally refreshed!");
                         int Reward = Tx.RandomInt(2, 4);
                         Console.WriteLine("You gained " + Reward + " ventures!\n");
+                        Character.Ventures += Reward;
                         break;
                     case 5:
                         Tx.Emphasis("Discovery\n", "blue");                        
@@ -175,7 +181,7 @@ namespace Reliquary.Places
                         Console.Write("You are inspired at the sight of " + Discovery);
                         Experience = Tx.RandomInt(2,18);
                         Console.Write("You gained " + Experience + " experience points!");
-                        
+                        Character.AddExp(Experience);
                         break;
                 }
             }

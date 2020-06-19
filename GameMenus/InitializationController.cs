@@ -137,7 +137,7 @@ namespace Reliquary.GameMenus
                         Console.WriteLine("\nThank you, Lady " + Character.Name + ". Your adventure awaits you.");
                         break;
                 }
-                Inventory.AddItem(0);
+                Inventory.AddItem(ItemData.GetItem("signet ring").ID);
                 Tx.Emphasis("Press any key to start your adventure!\n", "cyan");
                 Console.ReadKey();
                 Console.Clear();

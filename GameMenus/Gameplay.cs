@@ -28,7 +28,7 @@ namespace Reliquary.GameMenus
             else if (wakeOrTravel == "New")
             {
                 Console.WriteLine("You stroll into the town of Merrydale. This looks like a great place to prepare for an adventure!\n");
-                Tx.Emphasis("\nPress any key.\n", "cyan");
+                Tx.Emphasis("Press any key.\n", "cyan");
                 Console.ReadKey();
                 Console.Clear();
                 Character.DisplayVentures();

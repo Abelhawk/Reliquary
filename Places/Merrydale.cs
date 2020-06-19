@@ -8,17 +8,17 @@ namespace Reliquary.Places
     class Merrydale
     {
         //New locations might be unlocked later.   
-        public static List<string> LocationOptionsList = new List<string> {
+        public static List<string> LocationOptions = new List<string> {
                 "Tavern",
                 "General Store",
                 "Smithy",
-                "Wildmarch Field (1)"
+                "Wildmarch Field (1)",
+                "Back"
             };
 
         public static bool Travel()
         {
-            string[] LocationOptions = LocationOptionsList.ToArray();
-            int Choice = Game.Choice(LocationOptions);
+            int Choice = Game.Choice(LocationOptions.ToArray());
             Choice--;
 
             if (LocationOptions[Choice] == "Tavern")
@@ -33,7 +33,7 @@ namespace Reliquary.Places
             {
                 Smithy();
             }
-            else if (LocationOptions[Choice] == "Wildmarch Field (1)")
+            else if (LocationOptions[Choice] == "Wildmarch Field (1)")             
             {
                 Console.Clear();
                 if (Character.Ventures > 0)
@@ -42,6 +42,10 @@ namespace Reliquary.Places
                     NavigationController.LoadPlace("Travel", 1);
                 }
                 return (Character.Ventures > 0);
+            }
+            else if (LocationOptions[Choice] == "Back")
+            {
+                Console.Clear();
             }
             return false;
         }
@@ -89,7 +93,12 @@ namespace Reliquary.Places
             string ByeSleep = Tx.RandomString(SleepTight) + "\n\n";
             string SleepMessage = "";
             string Goodbye = Tx.RandomString(Goodbyes) + "\n\n";
-            string[] Options = { "Buy a drink (2 gold)", "Rumors", "Sleep", "Exit" };
+            string[] Options = {
+                "Buy a drink (2 gold)",
+                "Rumors",
+                "Brawl (1)",
+                "Sleep",
+                "Exit" };
             bool Stay = true;
             Console.Clear();
             while (Stay)
@@ -113,7 +122,7 @@ namespace Reliquary.Places
                         }
                         else
                         {
-                            Dialog = "\"Here ya go! Doesn't do much yet, but maybe someday it'll give you Might and cost Wits for the rest of the day? I dunno.\""; //todo
+                            Dialog = "\"Here ya go! Doesn't do much, but maybe someday it'll give you Might and cost Wits for the rest of the day? I dunno.\""; //todo
                             //Do something
                             Character.Gold -= 2;
                         }
@@ -123,6 +132,9 @@ namespace Reliquary.Places
                         Dialog = Rumor;
                         break;
                     case 3:
+                        Dialog = "\"There'll be no brawlin' in my tavern! ...At least, not till that function's programmed.\"";
+                        break;
+                    case 4:
                         Console.Clear();
                         Tx.Emphasis("The Horn and Lantern Tavern\n", "cyan");
                         Tx.Emphasis("\"Where would ya like to sleep tonight?\"\n", "gold");
@@ -185,7 +197,7 @@ namespace Reliquary.Places
                             Dialog = "\"What else do ya need?\"";
                         }
                         break;
-                    case 4:
+                    case 5:
                         Console.Clear();
                         Tx.Emphasis(Goodbye, "gold");
                         Stay = false;
