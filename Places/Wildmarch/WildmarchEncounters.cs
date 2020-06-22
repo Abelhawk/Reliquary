@@ -36,30 +36,7 @@ namespace Reliquary.Places
             }
             int EncounterIndex = Tx.RandomInt(1, 100);
             Console.Clear();
-            // 70% chance of combat
-            if (EncounterIndex <= 70)
-            {
-                int MonsterIndex = Tx.RandomInt(1, 10);
-                string Monster = "";
-                if (MonsterIndex <= 4)
-                {
-                    Monster = "Big Rat";
-                }
-                else if (MonsterIndex <= 7)
-                {
-                    Monster = "Swarm of Horseflies";
-                }
-                else if (MonsterIndex <= 9)
-                {
-                    Monster = "Bandit";
-                }
-                else
-                {
-                    Monster = "Gold Rat"; //Limited time only
-                }
-                CombatController.Combat(MonsterData.GetMonster(Monster));
-            }
-            else
+            if (EncounterIndex <= 30)             // 70% chance of combat
             {
                 int RandomEncounter = Tx.RandomInt(1, 5);
                 switch (RandomEncounter)
@@ -79,7 +56,7 @@ namespace Reliquary.Places
                         }
                         break;
                     case 2:
-                        if (Character.WitsCheck(10))
+                        if (Character.WitsCheck(10) && Discoveries.IroncliffMountains == false)
                         {
                             Console.Write("You discover the path to ");
                             Tx.Emphasis("Ironcliff Mountains", "cyan");
@@ -88,14 +65,15 @@ namespace Reliquary.Places
                         }
                         else
                         {
-                            goto case 1;
+                            EncounterIndex = 99;
                         }
                         break;
                     case 3:
                         Tx.Emphasis("Wandering Traveler\n", "blue");
                         Console.WriteLine("A weary-looking man with a walking stick stumbles out of the tall grass.");
                         bool IsABandit = false;
-                        if (Tx.RandomInt(1, 2) == 2)
+                        int RandomIdentity = Tx.RandomInt(1, 2);
+                        if (RandomIdentity == 2)
                         {
                             IsABandit = true;
                         }
@@ -142,7 +120,7 @@ namespace Reliquary.Places
                                 }
                                 else
                                 {
-                                    Console.WriteLine("You spend some time directing the traveler toward Merrydale. Grateful, he hands you a" +
+                                    Console.WriteLine("You spend some time directing the traveler toward Merrydale. Grateful, he hands you a " +
                                         "few coins for your trouble.");
                                     int Reward2 = Tx.RandomInt(4, 8);
                                     Console.WriteLine("You received " + Reward2 + " gold!\n");
@@ -169,7 +147,7 @@ namespace Reliquary.Places
                         Character.Ventures += Reward;
                         break;
                     case 5:
-                        Tx.Emphasis("Discovery\n", "blue");                        
+                        Tx.Emphasis("Discovery\n", "blue");
                         string[] Discovery = new string[] {
                             "the ruins of a magnificent mage tower.",
                             "a moss-covered statue of an armored knight.",
@@ -179,16 +157,37 @@ namespace Reliquary.Places
                             "a flock of griffins soaring across the sky."
                         };
                         Console.Write("You are inspired at the sight of " + Discovery);
-                        Experience = Tx.RandomInt(2,18);
-                        Console.Write("You gained " + Experience + " experience points!");
+                        Experience = Tx.RandomInt(2, 18);
                         Character.AddExp(Experience);
+                        Console.WriteLine("");
                         break;
+                }                
+            }
+            if (EncounterIndex > 30)
+            {
+                int MonsterIndex = Tx.RandomInt(1, 10);
+                string Monster = "";
+                if (MonsterIndex <= 4)
+                {
+                    Monster = "Big Rat";
                 }
+                else if (MonsterIndex <= 7)
+                {
+                    Monster = "Swarm of Horseflies";
+                }
+                else if (MonsterIndex <= 9)
+                {
+                    Monster = "Bandit";
+                }
+                else
+                {
+                    Monster = "Gold Rat"; //Limited time only
+                }
+                CombatController.Combat(MonsterData.GetMonster(Monster));
             }
             Tx.Emphasis("Press any key to continue.", "cyan");
             Console.ReadKey();
             Console.Clear();
-            Character.AddExp(Experience);
         }        
     }
 }

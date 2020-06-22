@@ -19,25 +19,30 @@ namespace Reliquary
         public static int NextLevel = 10;
 
         //These might need "maximum" values so that the current value can be modified by factors
-        public static int Might = 1;
-        public static int Fitness = 3;
-        public static int Wits = 1;        
+        public static int MaxMight = 3;
+        public static int Might = 3;
+        public static int MaxFitness = 15;
+        public static int Fitness = 15;
+        public static int MaxWits = 3;        
+        public static int Wits = 3;        
 
         public static string ShowFitness()
         {
-            /*
-             Oo, you know what'd be cool? If the character actually had hit points (int),
-             but it was just measured in percentages. So they knew if they were "wounded"
-             or "injured," but they didn't know how badly. I like that.
-             */
-            switch (Fitness)
-            {
-                case 2:
+            if (Fitness <= MaxFitness/2)            {
+                
+                if (Fitness <= MaxFitness/3)
+                {
                     return "Injured";
-                case 1:
-                    return "Wounded";
-                case 0:
-                    return "Unfit for Adventuring";
+                }
+                if (Fitness == 1)
+                {
+                    return "Heavily Wounded";
+                }
+                else
+                {
+                    return "Bruised";
+                }
+                        
             }
             return "Healthy";
         }
@@ -56,7 +61,7 @@ namespace Reliquary
 
         public static bool MightCheck(int DC)
         {
-            int DieRoll = Tx.RandomInt(1, 10); // Hmm... possible to crit or crit-fail?
+            int DieRoll = Tx.RandomInt(1, 10);
             return (DieRoll + Might >= DC);
         }
 
@@ -84,14 +89,19 @@ namespace Reliquary
 
         public static void AddExp(int amount)
         {
-            ExperiencePoints += amount;
-            if (ExperiencePoints >= NextLevel)
+            if (amount > 0)
             {
-                Tx.Emphasis("LEVEL UP!", "red");
-                Level ++;
-                NextLevel = Level*Level*10;
-                //Prompt player to choose where to add points in Might and Wits
-            }
+                Console.WriteLine("You gained " + amount + " experience points!");
+                ExperiencePoints += amount;
+                if (ExperiencePoints >= NextLevel)
+                {
+                    Tx.Emphasis("LEVEL UP!", "red");
+                    Level++;
+                    NextLevel = Level * Level * 10;
+                    //Prompt player to choose where to add points in Might and Wits
+                    //Clear the console when it's done
+                }
+            }            
         }
     }
 

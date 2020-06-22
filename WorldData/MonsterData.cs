@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Reliquary.Classes;
 
 // I may need to eventually sort these by place. As well as encounters.
@@ -14,7 +15,7 @@ namespace Reliquary.WorldData
             Name = "Big Rat",
             EncounterText = "A rat the size of a small dog jumps out at you, its fangs bared!",
             Level = 1,
-            Fitness = 1,
+            Fitness = 4,
             Might = 1,
             Wits = 1,
         };
@@ -24,13 +25,13 @@ namespace Reliquary.WorldData
             Name = "Gold Rat",
             EncounterText = "A large rat with glistening golden fur flashes a set of golden teeth at you and attacks!",
             Level = 1,
-            Fitness = 1,
+            Fitness = 4,
             Might = 1,
             Wits = 1,
             GoldSpoils = Tx.RandomInt(2, 9),
-            ItemDrops = new int[]
+            ItemDrops = new Item[]
             {
-                ItemData.GetItem("garnet").ID
+                ItemData.Garnet
             }
         };
 
@@ -38,14 +39,14 @@ namespace Reliquary.WorldData
         {
             Name = "Bandit",
             EncounterText = "You hear a snigger and see the glint of a knife in the vegetation nearby. A bandit attacks!",
-            Level = 2,
-            Fitness = 5,
+            Level = 1,
+            Fitness = 10,
             Might = 2,
             Wits = 3,
             GoldSpoils = Tx.RandomInt(5, 14),
-            ItemDrops = new int[]
+            ItemDrops = new Item[]
             {
-                ItemData.GetItem("signet ring").ID
+                ItemData.Garnet
             }
         };
 
@@ -54,7 +55,7 @@ namespace Reliquary.WorldData
             Name = "Swarm of Horseflies",
             EncounterText = "A loud buzzing fills the air, and a cloud of biting horseflies swarms around you!",
             Level = 2,
-            Fitness = 5,
+            Fitness = 7,
             Might = 1,
             Wits = -1
         };
@@ -64,19 +65,13 @@ namespace Reliquary.WorldData
         public static List<Monster> Monsters = new List<Monster>{
             BigRat,
             GoldRat,
-            Bandit
+            Bandit,
+            HorseflySwarm
         };
 
         public static Monster GetMonster(string MonsterName)
         {
-            for (int i = 0; i < Monsters.Count; i++)
-            {
-                if (MonsterName.ToLower() == Monsters[i].Name.ToLower())
-                {
-                    return Monsters[i];
-                }
-            }
-            return Monsters[0];
+            return Monsters.FirstOrDefault(m => m.Name.ToLower() == MonsterName.ToLower()) ?? Monsters[0];
         }
     }
 }

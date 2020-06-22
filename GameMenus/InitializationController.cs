@@ -14,7 +14,12 @@ namespace Reliquary.GameMenus
             Game.ShowLogo();
             Console.WriteLine("Welcome to Reliquary v.0.5!");
             bool Done = false;
-            string[] Options = { "New Game", "Continue", "Quit", "Quick Play <<" }; //Quick Play
+            string[] Options = {
+                "New Game",
+                "Continue",
+                "Quit",
+                "Quick Play <<" //Debugging
+            };
             while (Done == false)
             {
                 int Answer = Game.Choice(Options);

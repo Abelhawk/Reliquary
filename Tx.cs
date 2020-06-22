@@ -8,7 +8,7 @@ namespace Reliquary
     {
         internal static void Emphasis(object message, string color)
         {
-            // Currently supports cyan, gold, red, green, gray, blue
+            // Currently supports cyan, gold, red, green, gray, blue, lightred, darkgreen
             if (color.ToLower() == "cyan")
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -32,6 +32,14 @@ namespace Reliquary
             else if (color.ToLower() == "blue")
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
+            }
+            else if (color.ToLower() == "lightred")
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+            }
+            else if (color.ToLower() == "darkgreen")
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
             }
             else
             {

@@ -14,7 +14,7 @@ namespace Reliquary.WorldData
     {
         static public void LoadPlace(string wakeOrTravel, int venturesCost)
         {
-            if (wakeOrTravel == "Travel" && Character.Ventures == 0)
+            if (wakeOrTravel == "Travel" && Character.Ventures == 0 && venturesCost > 0)
             {
                 Console.WriteLine("You're too tired to venture anymore today.\n");
             }

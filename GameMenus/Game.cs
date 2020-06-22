@@ -6,14 +6,6 @@ namespace Reliquary.GameMenus
     {
         public static int Choice(string[] choices)
         {
-            /*
-                Format a choice like this:
-                string[] Options = { "Pet a goat", "Make a stew", "'I'm selling these fine leather jackets...'" };
-                int Answer = Choice(Options);
-                    switch (Answer) {
-                        case 1: ...
-                    }
-            */
             Console.WriteLine("\nMake your choice:");
             for (int i = 0; i < choices.Length; i++)
             {
@@ -61,50 +53,57 @@ namespace Reliquary.GameMenus
         public static void LookAtSelf()
         {
             Console.Clear();
-            Tx.Emphasis(Character.Gender + " " + Character.Name + "\n", "cyan");
+            Tx.Emphasis(Character.Gender + " " + Character.Name + "\n", "green");
             Console.WriteLine("Level " + Character.Level + " Adventurer\n");
             Console.Write("  Experience Points till level up: " + ((Character.Level * Character.Level) * 10 - Character.ExperiencePoints + "\n"));
             Console.Write("  Gold: ");
             Tx.Emphasis(Character.Gold, "gold");
             Console.Write("\n  Might: ");
-            if (Character.Might > 0)
+            if (Character.Might > Character.MaxMight)
             {
                 Tx.Emphasis("+" + Character.Might + "\n", "green");
             }
             else
             {
                 Tx.Emphasis(Character.Might + "\n", "red");
+                // Might say a status effect/condition next to it like SICK
             }
             Console.Write("  Will: ");
-            if (Character.Wits > 0)
+            if (Character.Wits >= Character.MaxWits)
             {
                 Tx.Emphasis("+" + Character.Wits + "\n", "green");
             }
             else
             {
                 Tx.Emphasis(Character.Wits + "\n", "red");
+                // Might say a status effect/condition next to it like DRUNK or HUNGOVER
             }
             Console.Write("  Fitness: ");
-            if (Character.ShowFitness() == "Healthy")
+            string Fitness = Character.ShowFitness();
+            if (Fitness == "Healthy")
             {
-                Tx.Emphasis(Character.ShowFitness(), "green");
+                Tx.Emphasis(Fitness, "green");
             }
-            else if (Character.ShowFitness() == "Unfit for Adventuring")
+            else if (Fitness == "Bruised")
             {
-                Tx.Emphasis(Character.ShowFitness(), "red");
+                Tx.Emphasis(Fitness, "gold");
             }
-            else
+            else if (Fitness == "Injured")
             {
-                Tx.Emphasis(Character.ShowFitness(), "gold");
+                Tx.Emphasis(Fitness, "lightred");
             }
-            Character.DisplayVentures();
+            else if (Fitness == "Heavily Wounded")
+            {
+                Tx.Emphasis(Fitness, "red");
+            }
             Console.WriteLine("\n");
+            Character.DisplayVentures();
         }
 
         public static void CheckInventory()
         {
             Console.Clear();
-            Tx.Emphasis("Your Inventory\n", "cyan");
+            Tx.Emphasis("Your Inventory\n", "green");
             if (Character.Inventory.Count == 0)
             {
                 Tx.Emphasis("Empty!\n", "gray");
